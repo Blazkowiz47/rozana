@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "787246753440",
+    "firebase_url": "https://rozana-app.firebaseio.com",
+    "project_id": "rozana-app",
+    "storage_bucket": "rozana-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787246753440:android:98f674c0dbb0e13409cbc5",
+        "android_client_info": {
+          "package_name": "com.example.rozana"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "787246753440-b30386qhbql3aka4pf2jrrfpev5fsb2f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnVvgOQB2faA_ByhJUZGI-GSwzCR59cDY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787246753440-b30386qhbql3aka4pf2jrrfpev5fsb2f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "787246753440-57p4vq3ahkndfjekmdlgoq2bhgv5o756.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rozona.rozona",
+                "app_store_id": "9790611702"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

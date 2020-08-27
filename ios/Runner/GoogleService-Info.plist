@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>787246753440-s4c1knljv3o0de7p6ooqb2inunee0mqu.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.787246753440-s4c1knljv3o0de7p6ooqb2inunee0mqu</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBiipUNsvohWFAb-DETho4-jVBHBsBM_sU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>787246753440</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.rozana</string>
+	<key>PROJECT_ID</key>
+	<string>rozana-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>rozana-app.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:787246753440:ios:f62da15949a5d0bf09cbc5</string>
+	<key>DATABASE_URL</key>
+	<string>https://rozana-app.firebaseio.com</string>
+</dict>
+</plist>
