@@ -66,7 +66,6 @@ class _LoginState extends State<Login> {
     );
 
   }
-
   Future signIn (String verID , AuthCredential credential , String otp , String phone) async {
     if (credential == null) {
       //In-case Auto retrieve doesn't work
@@ -227,11 +226,11 @@ class _LoginState extends State<Login> {
                 padding: EdgeInsets.all(0.0),
                 margin: EdgeInsets.all(0.0),
                 width: w * 0.7,
-                height: h * 0.3,
+                height: h * 0.4,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage("images/loginlogo.png"),
-                    fit: BoxFit.fill,
+                    fit: BoxFit.fitHeight,
                   ),
                 ),
               ),
@@ -314,11 +313,11 @@ class _LoginState extends State<Login> {
                 padding: EdgeInsets.only(
                   left: w * 0.1,
                   right: w * 0.1,
-                  top: h * 0.05,
+                  top: 20,
                   bottom: 0.0,
                 ),
                 child: Container(
-                  width: w,
+                  width: 180,
                   decoration: BoxDecoration(
                     color: Hexcolor("6BC65A"),
                     borderRadius: BorderRadius.all(Radius.circular(w * 0.03)),
@@ -359,7 +358,7 @@ class _LoginState extends State<Login> {
                         print("error in signing");
                         return  showDialog(context: context,
                           builder: (BuildContext context){
-                          return AlertDialog(title: Text("Error"),content: Text("Sign In failed"),actions: <Widget>[
+                          return AlertDialog(title: Text("Error"),content: Text("Sign In failed : \n $e"),actions: <Widget>[
                             FlatButton(
                               child: Text('Approve'),
                               onPressed: () {
@@ -376,7 +375,7 @@ class _LoginState extends State<Login> {
                       _phoneAuthentication ? "LOGIN WITH OTP" : "LOGIN",
                       style: GoogleFonts.openSans(
                         textStyle: TextStyle(
-                          fontSize: h * 0.035,
+                          fontSize: 18,
                           color: Colors.white,
                           decoration: TextDecoration.none,
                         ),
@@ -389,11 +388,11 @@ class _LoginState extends State<Login> {
                 padding: EdgeInsets.only(
                   left: w * 0.1,
                   right: w * 0.1,
-                  top: h * 0.05,
-                  bottom: h * 0.05,
+                  top: 15,
+                  bottom:10,
                 ),
                 child: Container(
-                  width: w,
+                  width: 180,
                   height: h * 0.07,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(w * 0.03)),
@@ -409,7 +408,7 @@ class _LoginState extends State<Login> {
                       _phoneAuthentication ? "LOGIN" : "LOGIN WITH OTP",
                       style: GoogleFonts.openSans(
                         textStyle: TextStyle(
-                          fontSize: h * 0.035,
+                          fontSize: 18,
                           color: Colors.red,
                           decoration: TextDecoration.none,
                         ),

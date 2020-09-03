@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "787246753440-l5qnni5c82v68ak1gceccbsgqf4be364.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rozana",
+            "certificate_hash": "d654d092b3446a264cbdd2ab02cbf99b4586988e"
+          }
+        },
+        {
           "client_id": "787246753440-b30386qhbql3aka4pf2jrrfpev5fsb2f.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -32,11 +40,10 @@
               "client_type": 3
             },
             {
-              "client_id": "787246753440-57p4vq3ahkndfjekmdlgoq2bhgv5o756.apps.googleusercontent.com",
+              "client_id": "787246753440-s4c1knljv3o0de7p6ooqb2inunee0mqu.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.rozona.rozona",
-                "app_store_id": "9790611702"
+                "bundle_id": "com.example.rozana"
               }
             }
           ]

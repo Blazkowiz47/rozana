@@ -218,7 +218,7 @@ class _MyAccountState extends State<MyAccount> {
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => MyWallet(),
+                  builder: (context) => MyWallet(user: user,),
                 ));
               },
               leading: Icon(

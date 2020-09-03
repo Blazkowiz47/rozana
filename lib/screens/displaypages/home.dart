@@ -1,4 +1,6 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rozana/model/database.dart';
 import 'package:rozana/screens/displaypages/homepagewidgets/categoryTab.dart';
@@ -47,7 +49,7 @@ class _HomeState extends State<Home> {
         //Search Bar
         Container(
           width: width,
-          height: height * 0.09,
+          height: 55,
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.only(
@@ -57,7 +59,7 @@ class _HomeState extends State<Home> {
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: width * 0.055, vertical: height * 0.015),
+                horizontal: width * 0.055, vertical: height * 0.009),
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: width * 0.04),
               decoration: BoxDecoration(
@@ -84,9 +86,11 @@ class _HomeState extends State<Home> {
                     selectAll: true,
                   ),
                   keyboardType: TextInputType.text,
+                  textAlign: TextAlign.left,
                   decoration: InputDecoration(
                     hintStyle: TextStyle(
                       fontFamily: GoogleFonts.openSans().fontFamily,
+                      fontSize: 16.0,
                     ),
                     hintText: "Search Products",
                     prefixIcon: GestureDetector(
@@ -117,15 +121,24 @@ class _HomeState extends State<Home> {
               scrollDirection: Axis.vertical,
               child: Column(
                 children: <Widget>[
-                  //Contains thhe starting ad which can be changed by changing the ad.png file in images directory
+                  //Contains the starting ad which can be changed by changing the ad.png file in images directory
                   Container(
                     width: width,
-                    height: height * 0.25,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                      image: AssetImage("images/ad.png"),
-                      fit: BoxFit.fill,
-                    )),
+                    height: height * 0.21,
+                    child: Swiper(
+                      itemCount: 4,
+                      itemBuilder: (context ,index){
+                        return Container(
+                          width: width,
+                          height: height * 0.21,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage("images/artboard$index.png"),
+                                fit: BoxFit.fill,
+                              )),
+                        );
+                      },
+                    ),
                   ),
                   //Showcases the gaurantees
                   Container(
@@ -257,6 +270,10 @@ class _HomeState extends State<Home> {
                     thickness: height * 0.003,
                   ),
                   //Creates Tab view for Category , New Arrival and Budget Friendly
+                  // CategoryTab(
+                  //     width: width,
+                  //     height: height,
+                  //     context: context),
                   DefaultTabController(
                     length: 3,
                     initialIndex: 0,
@@ -285,18 +302,24 @@ class _HomeState extends State<Home> {
                         Container(
                           width: width,
                           padding: EdgeInsets.all(1.0),
-                          height: height * 0.95,
+                          height: height * 0.76,
                           child: TabBarView(
                             children: <Widget>[
                               CategoryTab(
+                                  headimg: "images/categoryhead.png",
+                                  head: "Shop by Category",
                                   width: width,
                                   height: height,
                                   context: context),
                               CategoryTab(
+                                  headimg: "images/beautyhead.png",
+                                  head: "Shop by New Arrival",
                                   width: width,
                                   height: height,
                                   context: context),
                               CategoryTab(
+                                  headimg: "images/musthavehead.png",
+                                head: "Shop by Budget Friendly",
                                   width: width,
                                   height: height,
                                   context: context),
@@ -314,28 +337,22 @@ class _HomeState extends State<Home> {
                         )
                       : Container(),
                   //Oil and Ghee Banner
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: 2.5,
-                      bottom: 2.5,
-                    ),
-                    child: Container(
-                      height: height * 0.13,
-                      width: width,
-                      padding: EdgeInsets.all(0.0),
-                      margin: EdgeInsets.all(0.0),
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            spreadRadius: 2.50,
-                            blurRadius: 2.50,
-                            color: Colors.black26,
-                          )
-                        ],
-                        image: DecorationImage(
-                          image: AssetImage("images/oilgheebanner.png"),
-                          fit: BoxFit.cover,
-                        ),
+                  Container(
+                    height: height * 0.13,
+                    width: width,
+                    padding: EdgeInsets.all(0.0),
+                    margin: EdgeInsets.all(0.0),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        // BoxShadow(
+                        //   spreadRadius: 2.50,
+                        //   blurRadius: 2.50,
+                        //   color: Colors.black26,
+                        // )
+                      ],
+                      image: DecorationImage(
+                        image: AssetImage("images/oilgheebanner.png"),
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
@@ -350,23 +367,15 @@ class _HomeState extends State<Home> {
                           fit: BoxFit.fill,
                         ),
                         boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                          ),
+                          // BoxShadow(
+                          //   color: Colors.black26,
+                          // ),
                         ]),
                   ),
                   //Must Have category
                   Container(
                     width: width,
-                    height: height * 0.35,
-                    // decoration: BoxDecoration(
-                    //   boxShadow: [
-                    //     BoxShadow(
-                    //       color: Colors.black26,
-                    //       spreadRadius: 1,
-                    //     ),
-                    //   ],
-                    // ),
+                    height: height * 0.308,
                     child: Column(
                       children: <Widget>[
                         Padding(
@@ -404,7 +413,7 @@ class _HomeState extends State<Home> {
                           child: Container(
                             padding: EdgeInsets.all(0.0),
                             width: width,
-                            height: height * 0.25,
+                            height: height * 0.22,
                             child: MustHaveTab(
                                 height: height, width: width, context: context),
                           ),
@@ -425,15 +434,7 @@ class _HomeState extends State<Home> {
                   //Snack Store
                   Container(
                     width: width,
-                    height: height * 0.6,
-                    // decoration: BoxDecoration(
-                    //   boxShadow: [
-                    //     BoxShadow(
-                    //       color: Colors.black26,
-                    //       spreadRadius: 1,
-                    //     ),
-                    //   ],
-                    // ),
+                    height: height * 0.5,
                     child: Column(
                       children: <Widget>[
                         Padding(
@@ -469,9 +470,10 @@ class _HomeState extends State<Home> {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 5.0),
                           child: Container(
+                            color: Colors.white,
                             padding: EdgeInsets.all(0.0),
                             width: width,
-                            height: height * 0.5,
+                            height: height * 0.4,
                             child: Column(
                               children: <Widget>[
                                 Row(
@@ -492,14 +494,20 @@ class _HomeState extends State<Home> {
                                         },
                                         child: Container(
                                           width: width * 0.5,
-                                          height: height * 0.25,
+                                          height: height * 0.2,
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
-                                              Image.asset(
-                                                  "images/Noodles & Pasta.png"),
+                                              Container(
+                                                width: width * 0.5,
+                                                height: height * 0.17,
+                                                child: Image.asset(
+                                                    "images/Noodles & Pasta.png",
+                                                  fit: BoxFit.fitHeight,
+                                                ),
+                                              ),
                                               Text(
                                                 "Noodles & Pasta",
                                                 style:
@@ -526,14 +534,20 @@ class _HomeState extends State<Home> {
                                         },
                                         child: Container(
                                           width: width * 0.5,
-                                          height: height * 0.25,
+                                          height: height * 0.2,
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
-                                              Image.asset(
-                                                  "images/Chips & Popcorn.png"),
+                                              Container(
+                                                width: width * 0.5,
+                                                height: height * 0.17,
+                                                child: Image.asset(
+                                                    "images/Chips & Popcorn.png",
+                                                  fit: BoxFit.fitHeight,
+                                                ),
+                                              ),
                                               Text(
                                                 "Chips & Popcorn",
                                                 style:
@@ -566,14 +580,20 @@ class _HomeState extends State<Home> {
                                         },
                                         child: Container(
                                           width: width * 0.5,
-                                          height: height * 0.25,
+                                          height: height * 0.2,
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
-                                              Image.asset(
-                                                  "images/Namkeen & Savouries.png"),
+                                              Container(
+                                                width: width * 0.5,
+                                                height: height * 0.17,
+                                                child: Image.asset(
+                                                    "images/Namkeen & Savouries.png",
+                                                  fit:BoxFit.fitHeight,
+                                                ),
+                                              ),
                                               Text(
                                                 "Namkeen & Savouries",
                                                 style:
@@ -600,14 +620,20 @@ class _HomeState extends State<Home> {
                                         },
                                         child: Container(
                                           width: width * 0.5,
-                                          height: height * 0.25,
+                                          height: height * 0.2,
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
-                                              Image.asset(
-                                                  "images/Crispy Snacks.png"),
+                                              Container(
+                                                width: width * 0.5,
+                                                height: height * 0.17,
+                                                child: Image.asset(
+                                                    "images/Crispy Snacks.png",
+                                                  fit:BoxFit.fitHeight,
+                                                ),
+                                              ),
                                               Text(
                                                 "Crispy Snacks",
                                                 style:
@@ -631,7 +657,7 @@ class _HomeState extends State<Home> {
                   //Beauty Store
                   Container(
                     width: width,
-                    height: height * 0.6,
+                    height: height * 0.5,
                     // decoration: BoxDecoration(
                     //   boxShadow: [
                     //     BoxShadow(
@@ -675,9 +701,10 @@ class _HomeState extends State<Home> {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 5.0),
                           child: Container(
+                            color: Colors.white,
                             padding: EdgeInsets.all(0.0),
                             width: width,
-                            height: height * 0.5,
+                            height: height * 0.4,
                             child: Column(
                               children: <Widget>[
                                 Row(
@@ -698,18 +725,23 @@ class _HomeState extends State<Home> {
                                         },
                                         child: Container(
                                           width: width * 0.5,
-                                          height: height * 0.25,
+                                          height: height * 0.2,
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
-                                              Image.asset(
-                                                  "images/Summer Makeup.png"),
+                                              Container(
+                                                width: width * 0.5,
+                                                height: height * 0.17,
+                                                alignment: Alignment.topCenter,
+                                                child: Image.asset(
+                                                    "images/Summer Makeup.png"),
+                                              ),
                                               Text(
                                                 "Summer Makeup",
                                                 style:
-                                                    TextStyle(fontSize: 13.0),
+                                                    TextStyle(fontSize: 13),
                                                 textAlign: TextAlign.center,
                                               ),
                                             ],
@@ -733,7 +765,7 @@ class _HomeState extends State<Home> {
                                         },
                                         child: Container(
                                           width: width * 0.5,
-                                          height: height * 0.25,
+                                          height: height * 0.2,
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
@@ -772,7 +804,7 @@ class _HomeState extends State<Home> {
                                         },
                                         child: Container(
                                           width: width * 0.5,
-                                          height: height * 0.25,
+                                          height: height * 0.2,
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
@@ -807,7 +839,7 @@ class _HomeState extends State<Home> {
                                         },
                                         child: Container(
                                           width: width * 0.5,
-                                          height: height * 0.25,
+                                          height: height * 0.2,
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
@@ -836,9 +868,7 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   //Just to make it look nice
-                  SizedBox(
-                    height: 10.0,
-                  ),
+
                 ],
               ),
             ),

@@ -54,6 +54,7 @@ class CartItems {
   final Product product;
   final bool Booked;
   final bool delivered;
+  int noOfItems;
   CartItems({
     this.Booked,
     this.delivered,
@@ -62,6 +63,7 @@ class CartItems {
     this.offer,
     this.productId,
     this.product,
+    this.noOfItems,
 });
 }
 
@@ -422,7 +424,10 @@ class CartItemList extends StatefulWidget {
   final double height;
   final double width;
   final bool isOffer;
-  CartItemList({this.product,this.offer, this.height, this.width, this.selectedIndex,this.isOffer});
+  final FirebaseUser user;
+  final int noOfItems;
+  final String productId;
+  CartItemList({this.product , this.productId , this.user , this.noOfItems,this.offer, this.height, this.width, this.selectedIndex,this.isOffer});
   @override
   _CartItemListState createState() => _CartItemListState();
 }
@@ -430,6 +435,7 @@ class CartItemList extends StatefulWidget {
 class _CartItemListState extends State<CartItemList> {
   DifferentItems selectedItem;
   int selectedProductQuantity;
+
   @override
   void initState() {
     widget.isOffer ? null : setState(() {
@@ -446,7 +452,7 @@ class _CartItemListState extends State<CartItemList> {
       child: Container(
         //This is the product Item Widget
         width: widget.width,
-        height: widget.height * 0.22,
+        height: widget.height * 0.25,
         padding: EdgeInsets.symmetric(horizontal: 10.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(15.0)),
@@ -457,7 +463,7 @@ class _CartItemListState extends State<CartItemList> {
             //Displays Image
             Container(
               width: widget.width * 0.32,
-              height: widget.height * 0.18,
+              height: widget.height * 0.20,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(15.0)),
                 border: Border.all(color: Colors.black, width: 1.0),
@@ -551,6 +557,7 @@ class _CartItemListState extends State<CartItemList> {
                           ),
                         ],
                       ),
+
                       SizedBox(
                         width: widget.width * 0.10,
                       ),
@@ -566,6 +573,98 @@ class _CartItemListState extends State<CartItemList> {
                           ),
                         ),
                         color: Theme.of(context).primaryColor,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      IconButton(
+                        onPressed: () {
+                          try{
+                            UserDatabaseService(user: widget.user).updateItemCount(productId: widget.productId , noOfItems: widget.noOfItems - 1);
+                            showDialog(context: context , builder: (BuildContext context){
+                              return Container(
+                                height: 150.00,
+                                width: 200.0,
+                                child: AlertDialog(
+                                  title: Text("Updating"),
+                                  content: Center(child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text("Please wait"),
+                                      CircularProgressIndicator(),
+                                    ],
+                                  ),),
+                                ),
+                              );
+                            });
+                            Future.delayed(Duration(milliseconds: 2000) , (){
+                              Navigator.of(context).pop();
+                            });
+                          }catch(e){
+                            Future.delayed(Duration(milliseconds: 3000), (){
+                              showDialog(context: context , builder: (BuildContext context){
+                                return AlertDialog(
+                                  title: Text("Error"),
+                                  content: Text("Seems to be an Error"),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: Text('Approve'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              });
+                            });
+                          }
+                        },
+                        icon: Icon(Icons.remove),
+                      ),
+                      Text("${widget.noOfItems}"),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            try{
+                              UserDatabaseService(user: widget.user).updateItemCount(productId: widget.productId , noOfItems: widget.noOfItems + 1);
+                              showDialog(context: context , builder: (BuildContext context){
+                                return AlertDialog(
+                                  title: Text("Updating"),
+                                  content: Center(child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text("Please wait"),
+                                      CircularProgressIndicator(),
+                                    ],
+                                  ),),
+                                );
+                              });
+                              Future.delayed(Duration(milliseconds: 2000) , (){
+                                Navigator.of(context).pop();
+                              });
+                            }catch(e){
+                              Future.delayed(Duration(milliseconds: 3000), (){
+                                showDialog(context: context , builder: (BuildContext context){
+                                  return AlertDialog(
+                                    title: Text("Error"),
+                                    content: Text("Seems to be an Error"),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        child: Text('Approve'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                });
+                              });
+                            }
+                          });
+                        },
+                        icon: Icon(Icons.add),
                       ),
                     ],
                   ),

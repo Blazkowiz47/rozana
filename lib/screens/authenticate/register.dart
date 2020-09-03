@@ -85,7 +85,7 @@ class _RegisterState extends State<Register> {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage("images/loginlogo.png"),
-                    fit: BoxFit.fill,
+                    fit: BoxFit.fitHeight,
                   ),
                 ),
               ),
@@ -177,7 +177,7 @@ class _RegisterState extends State<Register> {
                   bottom: 10.0,
                 ),
                 child: Container(
-                  width: w,
+                  width: 180,
                   decoration: BoxDecoration(
                     color: Hexcolor("6BC65A"),
                     borderRadius: BorderRadius.all(Radius.circular(w * 0.03)),
@@ -204,6 +204,22 @@ class _RegisterState extends State<Register> {
                             ],
                           );
                         });
+                      if (password.length <6)
+                        return showDialog(context: context ,
+                            builder: (BuildContext context){
+                              return AlertDialog(
+                                title: Text("Error"),
+                                content: Text("Please Keep the password of atleast 6 chahracters"),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text('Approve'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
                       try{
                         int phone = int.parse(phoneNumber);
                         if(phone.toString().length != 10)
@@ -226,7 +242,7 @@ class _RegisterState extends State<Register> {
                         builder: (BuildContext context){
                           return AlertDialog(
                             title: Text("Error"),
-                            content: Text("Please Check your password"),
+                            content: Text("Please Check your Phone Number"),
                             actions: <Widget>[
                               FlatButton(
                                 child: Text('Approve'),
@@ -300,7 +316,7 @@ class _RegisterState extends State<Register> {
                       "Register",
                       style: GoogleFonts.openSans(
                         textStyle: TextStyle(
-                          fontSize: h * 0.035,
+                          fontSize: 20,
                           color: Colors.white,
                           decoration: TextDecoration.none,
                         ),

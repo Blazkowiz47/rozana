@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rozana/screens/displaypages/homepagewidgets/gift2.dart';
+import 'dart:io';
 
 class GiftCards extends StatefulWidget {
   @override
@@ -14,7 +17,13 @@ class _GiftCardsState extends State<GiftCards> {
   String phone;
   String email;
   String name;
-
+  File _image;
+  final picker = ImagePicker();
+  @override
+  void initState() {
+    Permission.storage.request();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -75,16 +84,32 @@ class _GiftCardsState extends State<GiftCards> {
                     )),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0 , vertical: 10.0),
-              child: Text(
-                "Select the Amount",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w700,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0 , vertical: 10.0),
+                  child: Text(
+                    "Select the Amount",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0 , vertical: 10.0),
+                  child: Text(
+                    "${amount.round()}",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
             ),
             Slider(
               value: amount,
@@ -100,16 +125,66 @@ class _GiftCardsState extends State<GiftCards> {
                 });
               },
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0 , vertical: 10.0),
-              child: Text(
-                "Select your gift images",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w700,
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0 , vertical: 10.0),
+                  child: Text(
+                    "Select your gift images",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0 , vertical: 10.0),
+                  child: GestureDetector(
+                    onTap: () async {
+                      try{
+                        await picker.getImage(source: ImageSource.gallery).then((val){
+                          val == null ? null : setState(() {
+                            _image = File(val.path);
+                          });
+                        });
+                      }catch(e){
+                        showDialog(context: context , builder: (BuildContext context){
+                          return AlertDialog(
+                            title: Text("Error"),
+                            content: Text("Fetching Storage Failed \n ${e.toString()}"),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('Approve'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        });
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        color: Colors.black26,
+                      ),
+                      child: Padding(
+                        padding:  EdgeInsets.symmetric(horizontal: 10.0 , vertical: 5.0),
+                        child: Text(
+                          "Upload Image",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
@@ -163,7 +238,7 @@ class _GiftCardsState extends State<GiftCards> {
                   ),
                 ),
                 Container(
-                  height: height * 0.06,
+                  height: height * 0.05,
                   width: width * 0.3,
                   alignment: Alignment.centerLeft,
                   decoration: BoxDecoration(
@@ -184,6 +259,7 @@ class _GiftCardsState extends State<GiftCards> {
                 ),
               ],
             ),
+
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width *0.05 ,vertical: 10.0 ),
               child: Container(
@@ -191,12 +267,13 @@ class _GiftCardsState extends State<GiftCards> {
                 width: width*0.9,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage("images/gift.png"),
+                    image: _image == null ?  AssetImage("images/gift.png") : FileImage(_image),
                     fit: BoxFit.fill,
                   ),
                 ),
               ),
             ),
+
             Padding(
               padding: EdgeInsets.only(bottom: 2.0, left: 10.0, right: 10.0),
               child: Container(
@@ -268,20 +345,21 @@ class _GiftCardsState extends State<GiftCards> {
               ),
             ),
             Padding(
-              padding:  EdgeInsets.symmetric(vertical: 10.0),
+              padding:const EdgeInsets.symmetric(horizontal: 5.0 , vertical: 10.0),
               child: Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0 , vertical: 10.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0 , vertical: 10.0),
                     child: Text(
                       "Total Amount Rate: Rs.${amount.round()}",
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 18.0,
+                        fontSize: 17.0,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
+                  SizedBox(width: 5.0,),
                   GestureDetector(
                     onTap: (){
                       if(phone != null && email != null && name !=null && rname != null && message != null){
@@ -293,6 +371,7 @@ class _GiftCardsState extends State<GiftCards> {
                             message: message,
                             amount: amount*100,
                             email: email,
+                            image: _image,
                           ),
                         ));
                       }
@@ -319,7 +398,7 @@ class _GiftCardsState extends State<GiftCards> {
                     },
                     child: Container(
                       height: height * 0.06,
-                      width: width * 0.3,
+                      width: width * 0.27,
                       alignment: Alignment.centerLeft,
                       decoration: BoxDecoration(
                         color: Colors.green[800],
@@ -331,7 +410,7 @@ class _GiftCardsState extends State<GiftCards> {
                             overflow: TextOverflow.fade,
                             softWrap: false,
                             style: TextStyle(
-                              fontSize: 14.0,
+                              fontSize: 12.0,
                               fontWeight: FontWeight.w900,
                               color: Colors.white,
                             ),

@@ -28,11 +28,11 @@ class OfferList extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).backgroundColor,
           boxShadow: [
-            BoxShadow(
-              spreadRadius: 2.50,
-              blurRadius: 5.0,
-              color: Colors.black26,
-            )
+            // BoxShadow(
+            //   spreadRadius: 2.50,
+            //   blurRadius: 5.0,
+            //   color: Colors.black26,
+            // )
           ],
         ),
         child: ListView.builder(

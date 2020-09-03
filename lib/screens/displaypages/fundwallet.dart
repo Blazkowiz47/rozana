@@ -99,6 +99,9 @@ class _FundWalletState extends State<FundWallet> {
   void _handlePaymentError(PaymentFailureResponse response) {
     Future.delayed(Duration(milliseconds: 5000) , (){
       showDialog(context: context , builder: (BuildContext context){
+        print("-----------------------------");
+        print(response.message);
+        print("-----------------------------");
         return AlertDialog(
           title: Text("Error"),
           content: Text("Transaction Failed"),

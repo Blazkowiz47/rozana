@@ -24,6 +24,7 @@ class AuthService {
         "MyOrders" : [],
       });
     });
+    await _auth.signInWithEmailAndPassword(email: user.emailID.trim(), password: user.password.trim());
   }
 
   void updateLocation () async {
@@ -32,6 +33,7 @@ class AuthService {
       "Location" : [jsonEncode(user.addresses[0].toJson())],
     });
   }
+
 
   Stream<FirebaseUser> get userStream {
     return _auth.onAuthStateChanged;

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:rozana/main.dart';
 import 'package:rozana/model/models.dart';
 
@@ -180,75 +181,59 @@ class UserDatabaseService{
       print("Cart Empty");
       if(isOffer)
         return await userCollection.document(user.uid).updateData({
-        "Cart" : [{"ProductId" : productId , "IsOffer" : isOffer ,  "Offer" : jsonEncode(offer.toJson()) , "Booked" : false , "Delivered" : false}],
+        "Cart" : [{"ProductId" : productId , "IsOffer" : isOffer ,  "Offer" : jsonEncode(offer.toJson()) , "Booked" : false , "Delivered" : false , "NoOfItems" : 1}],
       });
       return await userCollection.document(user.uid).updateData({
-        "Cart" : [{"ProductId" : productId , "Index" : index , "IsOffer" : isOffer , "Product" : jsonEncode(product.toJson()) , "Booked" : false , "Delivered" : false}],
+        "Cart" : [{"ProductId" : productId , "Index" : index , "IsOffer" : isOffer , "Product" : jsonEncode(product.toJson()) , "Booked" : false , "Delivered" : false , "NoOfItems" : 1}],
       });}
-    print(ds.data["Cart"]);
-    print(ds.data["Cart"].runtimeType.toString());
-    print("Cart not empty");
     List<CartItems> cart = List<CartItems>();
-    print("Transferring LIst");
     ds.data["Cart"].forEach((item) {
       print("Transferring Started");
-      if(item["IsOffer"] && !item["Booked"]){
+      if(item["IsOffer"]){
         print("Transferring Offer");
-        cart.add(CartItems(productId: item["ProductId"] , isOffer: true , offer: OffersModel.fromJson(jsonDecode(item["Offer"])) , Booked: item["Booked"] ,delivered: item["Delivered"] ));
+        cart.add(CartItems(productId: item["ProductId"] , noOfItems: item["NoOfItems"] , isOffer: true , offer: OffersModel.fromJson(jsonDecode(item["Offer"])) , Booked: item["Booked"] ,delivered: item["Delivered"] ));
         print("Transfer complete");
       }
       else{
         print("Transferring Product");
-        cart.add(CartItems(index: item["Index"] , productId: item["ProductId"] , isOffer: false , product: Product.fromJson(jsonDecode(item["Product"])) , Booked: item["Booked"] , delivered: item["Delivered"] ));
+        cart.add(CartItems(index: item["Index"] , noOfItems: item["NoOfItems"] , productId: item["ProductId"] , isOffer: false , product: Product.fromJson(jsonDecode(item["Product"])) , Booked: item["Booked"] , delivered: item["Delivered"] ));
         print("Add complete");
       }
     });
+    bool alreadyPresent = false;
     for(int i = 0 ; i < cart.length ; i++){
       if((cart[i].productId == productId)&& !cart[i].Booked){
-        return null;
+        cart[i].noOfItems = cart[i].noOfItems+ 1;
+        alreadyPresent = true;
+        break;
       }
     }
-    if(isOffer) {
-      cart.add(CartItems(
+
+    if(!alreadyPresent){
+      if(isOffer) {
+        cart.add(CartItems(
           productId: productId,
           isOffer: isOffer,
           offer: offer,
           Booked: false,
           delivered: false,
-      ));
-    }
-    else{
-      cart.add(CartItems(
-        productId: productId,
-        index: index,
-        isOffer: isOffer,
-        product: product,
-        Booked: false,
-        delivered: false,
+          noOfItems: 1,
         ));
-    }
-    print("Test");
-   cart.map((e) {
-      if(e.isOffer){
-        return {
-          "ProductId": e.productId ,
-          "IsOffer" : e.isOffer,
-          "Offer" : jsonEncode(e.offer.toJson()),
-          "Booked" : e.Booked,
-          "Delivered": e.delivered,
-        };
       }
       else{
-        return {
-          "ProductId": e.productId ,
-          "IsOffer" : e.isOffer,
-          "Index" : e.index,
-          "Product" : jsonEncode(e.product.toJson()),
-          "Booked" : e.Booked,
-          "Delivered": e.delivered,
-        };
+        cart.add(CartItems(
+          productId: productId,
+          index: index,
+          isOffer: isOffer,
+          product: product,
+          noOfItems: 1,
+          Booked: false,
+          delivered: false,
+        ));
       }
-    }).toList();
+    }
+
+    print("Test");
     print("Test complete");
       return await userCollection.document(user.uid).updateData({
         "Cart" : cart.map((e) {
@@ -259,6 +244,7 @@ class UserDatabaseService{
               "Offer" : jsonEncode(e.offer.toJson()),
               "Booked" : e.Booked,
               "Delivered": e.delivered,
+              "NoOfItems" : e.noOfItems,
             };
           }
           else{
@@ -269,6 +255,7 @@ class UserDatabaseService{
               "Product" : jsonEncode(e.product.toJson()),
               "Booked" : e.Booked,
               "Delivered": e.delivered,
+              "NoOfItems" : e.noOfItems,
             };
           }
         }).toList(),
@@ -280,6 +267,60 @@ class UserDatabaseService{
     return await userCollection.document(user.uid).updateData({
       "Cart" : [],
     });
+  }
+  Future<bool> updateItemCount({String productId , int noOfItems}) async{
+    DocumentSnapshot ds = await userCollection.document(user.uid).get();
+    List<CartItems> cart = List<CartItems>();
+    ds.data["Cart"].forEach((item) {
+      if(item["IsOffer"]){
+        cart.add(CartItems(productId: item["ProductId"] , noOfItems: item["NoOfItems"] , isOffer: true , offer: OffersModel.fromJson(jsonDecode(item["Offer"])) , Booked: item["Booked"] ,delivered: item["Delivered"] ));
+      }
+      else{
+        print("Transferring Product");
+        cart.add(CartItems(index: item["Index"] , noOfItems: item["NoOfItems"] , productId: item["ProductId"] , isOffer: false , product: Product.fromJson(jsonDecode(item["Product"])) , Booked: item["Booked"] , delivered: item["Delivered"] ));
+        print("Add complete");
+      }
+    });
+    for(int i = 0 ; i < cart.length ; i++){
+      if((cart[i].productId == productId) && !cart[i].Booked){
+        if(noOfItems == 0) {
+          cart.removeAt(i);
+          break;
+        }
+        cart[i].noOfItems = noOfItems;
+        break;
+      }
+    }
+    try{
+      await userCollection.document(user.uid).updateData({
+        "Cart" : cart.map((e) {
+          if(e.isOffer){
+            return {
+              "ProductId": e.productId ,
+              "IsOffer" : e.isOffer,
+              "Offer" : jsonEncode(e.offer.toJson()),
+              "Booked" : e.Booked,
+              "Delivered": e.delivered,
+              "NoOfItems" : e.noOfItems,
+            };
+          }
+          else{
+            return {
+              "ProductId": e.productId ,
+              "IsOffer" : e.isOffer,
+              "Index" : e.index,
+              "Product" : jsonEncode(e.product.toJson()),
+              "Booked" : e.Booked,
+              "Delivered": e.delivered,
+              "NoOfItems" : e.noOfItems,
+            };
+          }
+        }).toList(),
+      });
+      return true;
+    }catch(e){
+      return false;
+    }
   }
   void removeItem({String productId , String index , bool isOffer}) async {
     DocumentSnapshot ds = await userCollection.document(user.uid).get();
@@ -307,6 +348,7 @@ class UserDatabaseService{
             "IsOffer" : e.isOffer,
             "Offer" : jsonEncode(e.offer.toJson()),
             "Booked" : e.Booked,
+            "NoOfItems" : e.noOfItems,
           };
         }
         else{
@@ -316,6 +358,7 @@ class UserDatabaseService{
             "Index" : e.index,
             "Product" : jsonEncode(e.product.toJson()),
             "Booked" : e.Booked,
+            "NoOfItems" : e.noOfItems,
           };
         }
       }).toList(),

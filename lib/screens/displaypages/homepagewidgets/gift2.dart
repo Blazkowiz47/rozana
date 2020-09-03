@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -9,7 +10,8 @@ class GiftCards2 extends StatefulWidget {
   final String phone;
   final String email;
   final String name;
-  GiftCards2({this.amount, this.rname, this.message, this.phone, this.email, this.name});
+  final File image;
+  GiftCards2({ this.image ,  this.amount, this.rname, this.message, this.phone, this.email, this.name});
   @override
   _GiftCards2State createState() => _GiftCards2State();
 }
@@ -235,7 +237,7 @@ class _GiftCards2State extends State<GiftCards2> {
                     ),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage("images/gift.png"),
+                        image: widget.image == null ? AssetImage("images/gift.png") : FileImage(widget.image),
                         fit: BoxFit.fill,
                       ),
                     ),

@@ -113,9 +113,8 @@ class _CartState extends State<Cart> {
                               Booked: cart[i]["Booked"],
                               isOffer: cart[i]["IsOffer"],
                               productId: cart[i]["ProductId"],
-                              offer: OffersModel.fromJson(
-                                  jsonDecode(cart[i]["Offer"]),
-                              ),
+                              noOfItems: cart[i]["NoOfItems"],
+                              offer: OffersModel.fromJson(jsonDecode(cart[i]["Offer"])),
                             ));
 //                                Firestore.instance.collection("offers").document(cart[i]["ProductId"]).get().then((document) {
 //                                  offersProducts.add(
@@ -150,11 +149,10 @@ class _CartState extends State<Cart> {
                             cart[i]["Booked"] ? null : list.add(CartItems(
                               Booked: cart[i]["Booked"],
                               isOffer: cart[i]["IsOffer"],
-                                productId: cart[i]["ProductId"],
-                                index: cart[i]["Index"],
-                                product: Product.fromJson(
-                                    jsonDecode(cart[i]["Product"]),
-                                ),
+                              productId: cart[i]["ProductId"],
+                              index: cart[i]["Index"],
+                              product: Product.fromJson(jsonDecode(cart[i]["Product"])),
+                              noOfItems: cart[i]["NoOfItems"],
                             ));
 //                                Firestore.instance.collection("normalProducts").document(cart[i]["ProductId"]).get().then((doc){
 //                                  DifferentItems differentItems = DifferentItems(
@@ -268,10 +266,10 @@ class _CartState extends State<Cart> {
                             }
 
                             if(list[index].isOffer){
-                                total += double.parse(list[index].offer.mrp) * (1 - double.parse(list[index].offer.offerPercent)/100);
-                                tax += double.parse(list[index].offer.mrp) * (double.parse(list[index].offer.tax)/100);
-                                savings += double.parse(list[index].offer.mrp) * (double.parse(list[index].offer.offerPercent)/100);
-                                originalTotal += double.parse(list[index].offer.mrp);
+                                total +=list[index].noOfItems *double.parse(list[index].offer.mrp) * (1 - double.parse(list[index].offer.offerPercent)/100);
+                                tax += list[index].noOfItems * double.parse(list[index].offer.mrp) * (double.parse(list[index].offer.tax)/100);
+                                savings += list[index].noOfItems * double.parse(list[index].offer.mrp) * (double.parse(list[index].offer.offerPercent)/100);
+                                originalTotal += list[index].noOfItems * double.parse(list[index].offer.mrp);
                                 print(total);
                                 print(tax);
                               return Padding(
@@ -279,16 +277,19 @@ class _CartState extends State<Cart> {
                                 child: CartItemList(
                                   height: height,
                                   width: width,
+                                  user: user.data,
+                                  productId: list[index].productId,
+                                  noOfItems: list[index].noOfItems,
                                   isOffer: list[index].isOffer,
                                   offer: list[index].offer,
                                 ),
                               );
                             }
 
-                              total += double.parse(list[index].product.items[int.parse(list[index].index)].mrp) * (1 - double.parse(list[index].product.items[int.parse(list[index].index)].discount)/100);
-                              tax += double.parse(list[index].product.items[ int.parse(list[index].index) ].mrp) * (double.parse(list[index].product.items[int.parse(list[index].index)].tax)/100);
-                              savings += double.parse(list[index].product.items[int.parse(list[index].index)].mrp) * (double.parse(list[index].product.items[int.parse(list[index].index)].discount)/100);
-                              originalTotal += double.parse(list[index].product.items[int.parse(list[index].index)].mrp);
+                              total +=list[index].noOfItems * double.parse(list[index].product.items[int.parse(list[index].index)].mrp) * (1 - double.parse(list[index].product.items[int.parse(list[index].index)].discount)/100);
+                              tax +=list[index].noOfItems * double.parse(list[index].product.items[ int.parse(list[index].index) ].mrp) * (double.parse(list[index].product.items[int.parse(list[index].index)].tax)/100);
+                              savings +=list[index].noOfItems * double.parse(list[index].product.items[int.parse(list[index].index)].mrp) * (double.parse(list[index].product.items[int.parse(list[index].index)].discount)/100);
+                              originalTotal += list[index].noOfItems *double.parse(list[index].product.items[int.parse(list[index].index)].mrp);
                               print(total);
                             print(tax);
                             return Padding(
@@ -296,7 +297,10 @@ class _CartState extends State<Cart> {
                               child: CartItemList(
                                 height: height,
                                 width: width,
+                                user: user.data,
+                                productId: list[index].productId,
                                 isOffer: list[index].isOffer,
+                                noOfItems: list[index].noOfItems,
                                 selectedIndex: int.parse(
                                     list[index].index),
                                 product: list[index].product,

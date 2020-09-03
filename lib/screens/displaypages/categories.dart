@@ -12,6 +12,7 @@ class Categories extends StatelessWidget {
     width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
+        color: Colors.white,
         padding: EdgeInsets.symmetric(vertical: 5.0),
         width: width,
         height: height,
@@ -83,6 +84,7 @@ class Categories extends StatelessWidget {
       },
       child: Card(
         child: Container(
+          color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,

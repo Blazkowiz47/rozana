@@ -1,7 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:rozana/screens/authenticate/SetPassword.dart';
 
 class ForgotPassword extends StatefulWidget {
   @override
@@ -13,6 +13,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   var textDecoration = TextDecoration.none;
   String otp;
   String email;
+
   @override
   Widget build(BuildContext context) {
     var h = MediaQuery.of(context).size.height;
@@ -72,70 +73,73 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(0.0),
-                margin: EdgeInsets.all(0.0),
-                width: w * 0.7,
-                height: h * 0.3,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("images/loginlogo.png"),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ),
               Padding(
-                padding: EdgeInsets.only(bottom: 2.0, left: 20.0, right: 20.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "E-mail or Mobile Number",
-                  ),
-                  onChanged: (val) {
-                    setState(() => email = val);
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "Enter OTP",
-                  ),
-                  obscureText: _obscureText,
-                  onChanged: (val) {
-                    setState(() => otp = val);
-                  },
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    textDecoration = TextDecoration.underline;
-                  });
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 15.0, top: 10.0),
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      "Get OTP code",
-                      textAlign: TextAlign.end,
-                      style: GoogleFonts.openSans(
-                        textStyle: TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.redAccent,
-                        ),
-                        decoration: textDecoration,
-                      ),
+                padding: EdgeInsets.only(top: h*0.05),
+                child: Container(
+                  padding: EdgeInsets.all(0.0),
+                  margin: EdgeInsets.all(0.0),
+                  width: w * 0.7,
+                  height: h * 0.4,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("images/loginlogo.png"),
+                      fit: BoxFit.fill,
                     ),
                   ),
                 ),
               ),
               Padding(
+                padding: EdgeInsets.only( top : h*0.02 , bottom: 2.0, left: 20.0, right: 20.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    hintText: "Enter your E-mail here",
+                  ),
+                  onChanged: (val) {
+                    setState(() => email = val.trim());
+                  },
+                ),
+              ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
+              //   child: TextFormField(
+              //     decoration: InputDecoration(
+              //       hintText: "Enter OTP",
+              //     ),
+              //     obscureText: _obscureText,
+              //     onChanged: (val) {
+              //       setState(() => otp = val);
+              //     },
+              //   ),
+              // ),
+              // GestureDetector(
+              //   onTap: () {
+              //     setState(() {
+              //       textDecoration = TextDecoration.underline;
+              //     });
+              //   },
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(right: 15.0, top: 10.0),
+              //     child: Container(
+              //       alignment: Alignment.centerRight,
+              //       child: Text(
+              //         "Get OTP code",
+              //         textAlign: TextAlign.end,
+              //         style: GoogleFonts.openSans(
+              //           textStyle: TextStyle(
+              //             fontSize: 15.0,
+              //             color: Colors.redAccent,
+              //           ),
+              //           decoration: textDecoration,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              Padding(
                 padding: EdgeInsets.only(
-                  left: w * 0.1,
-                  right: w * 0.1,
-                  top: h * 0.05,
+                  left: w * 0.2,
+                  right: w * 0.2,
+                  top: h * 0.1,
                   bottom: 0.0,
                 ),
                 child: Container(
@@ -145,14 +149,57 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     borderRadius: BorderRadius.all(Radius.circular(w * 0.03)),
                   ),
                   child: FlatButton(
-                    onPressed: () {
+                    onPressed: ()async {
                       print("check");
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SetPassword(),
-                      ));
+                      try{
+                        if(email.contains("@")&&email.contains(".")){
+                          await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+                        }
+                        else{
+                          return showDialog(context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(title: Text("Error"),content: Text("Please enter correct Email"),actions: <Widget>[
+                                  FlatButton(
+                                    child: Text('Approve'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],);
+                              }
+                          );
+
+                        }
+                        showDialog(context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(title: Text("Success"),content: Text("Password Reset Link has been sent to your E=mail. Please follow the instructions there."),actions: <Widget>[
+                                FlatButton(
+                                  child: Text('Approve'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],);
+                            }
+                        );
+                      }catch(e){
+                        return showDialog(context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(title: Text("Failure"),content: Text("Password Reset failed due to : \n$e"),actions: <Widget>[
+                                FlatButton(
+                                  child: Text('Approve'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],);
+                            }
+                        );
+                      }
                     },
                     child: Text(
-                      "NEXT",
+                      "Reset Password",
                       style: GoogleFonts.openSans(
                         textStyle: TextStyle(
                           fontSize: h * 0.035,

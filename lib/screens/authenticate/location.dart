@@ -565,21 +565,21 @@ class _GetLocationState extends State<GetLocation> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 2.0, left: 10.0, right: 10.0),
-              child: Container(
-                width: width*0.9,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.person),
-                    hintText: "Country*",
-                  ),
-                  onChanged: (val) {
-                    setState(() => location.country = val);
-                  },
-                ),
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(bottom: 2.0, left: 10.0, right: 10.0),
+            //   child: Container(
+            //     width: width*0.9,
+            //     child: TextFormField(
+            //       decoration: InputDecoration(
+            //         prefixIcon: Icon(Icons.person),
+            //         hintText: "Country*",
+            //       ),
+            //       onChanged: (val) {
+            //         setState(() => location.country = val);
+            //       },
+            //     ),
+            //   ),
+            // ),
             Text("Make this my default address"),
             Padding(
               padding:  EdgeInsets.symmetric(vertical: 10.0),
@@ -658,7 +658,7 @@ class _GetLocationState extends State<GetLocation> {
                 onTap: (){
                   print("$firstName $lastName $phone $email ${location.country}  ${location.state} ${location.zipCode} ${location.city}  ${location.addressLine2} ${location.addressLine1} ${location.type}");
                   //Save Address,
-                  if( firstName != null && lastName != null && phone != null && email != null && location.country != null && location.state != null && location.zipCode != null && location.city != null && location.addressLine2 != null && location.addressLine1 != null && location.type != null ){
+                  if( firstName != null && lastName != null && phone != null && email != null && location.state != null && location.zipCode != null && location.city != null && location.addressLine2 != null && location.addressLine1 != null && location.type != null ){
                     submit(location);
                   }
                   else{

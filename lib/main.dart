@@ -26,12 +26,10 @@ List<String> categories = [
   "Body Care"
 ];
 List<Product> cart = [];
-
 List<OffersModel> offersGlobalList = [];
 void main() {
   runApp(MyApp());
 }
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

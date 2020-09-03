@@ -29,14 +29,15 @@ class MustHaveTab extends StatelessWidget {
             );
           },
           child: Container(
-            height: height * 0.2,
+            height: height * 0.16,
             width: width * 0.33,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Image.asset("images/snacks.png"),
-                Text(
+                Container( height: height*0.1 , child: Image.asset("images/snacks.png"),
+    ),Text(
                   "Night Snacks",
                   style: TextStyle(fontSize: 13.0),
                   textAlign: TextAlign.center,
@@ -56,16 +57,16 @@ class MustHaveTab extends StatelessWidget {
             );
           },
           child: Container(
-            height: height * 0.2,
+            height: height * 0.16,
             width: width * 0.33,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Image.asset("images/categories/${categories[1]}.png"),
+                Container( height: height*0.1 , child: Image.asset("images/categories/${categories[1]}.png"),),
                 Text(
                   "Summer Drinks & Mocktails",
-                  style: TextStyle(fontSize: 13.0),
+                  style: TextStyle(fontSize: 12.5),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -83,13 +84,13 @@ class MustHaveTab extends StatelessWidget {
             );
           },
           child: Container(
-            height: height * 0.2,
+            height: height * 0.16,
             width: width * 0.33,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Image.asset("images/categories/${categories[2]}.png"),
+                Container( height: height*0.1 , child: Image.asset("images/categories/${categories[2]}.png"),),
                 Text(
                   "Treat for Kids",
                   style: TextStyle(fontSize: 13.0),

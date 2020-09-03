@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rozana/model/database.dart';
+import 'package:rozana/model/models.dart';
 import 'package:rozana/screens/displaypages/cart.dart';
 import 'package:rozana/screens/displaypages/categories.dart';
 import 'package:rozana/screens/displaypages/home.dart';
@@ -16,7 +19,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentIndex = 0;
-
   List<Widget> widgetList = [
     Home(),
     Categories(),
@@ -32,6 +34,29 @@ class _HomePageState extends State<HomePage> {
     "Cart",
   ];
 
+  UserModel user;
+  bool userLogged = false;
+  String uid;
+  @override
+  void initState() {
+    FirebaseAuth.instance.currentUser().then((value) {
+      if(value != null){
+        setState(() {
+          uid = value.uid;
+        });
+        print("Got User");
+        DatabaseService(uid: value.uid).getUserModel().then((value) {
+          setState((){
+            user = value;
+            userLogged = true;
+          });
+          print("User Set");
+        });
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     void goBack() {
@@ -39,19 +64,16 @@ class _HomePageState extends State<HomePage> {
         currentIndex = 0;
       });
     }
-
     void navigateFromDrawerToCart() {
       setState(() {
         currentIndex = 4;
       });
     }
-
     void navigateFromDrawerToOffers() {
       setState(() {
         currentIndex = 3;
       });
     }
-
     void navigateFromDrawerToCategories() {
       setState(() {
         currentIndex = 1;
@@ -73,6 +95,8 @@ class _HomePageState extends State<HomePage> {
         goback: goBack,
       ),
     ];
+
+
 
     return Scaffold(
       appBar: widgetAppBar[currentIndex],
@@ -147,12 +171,13 @@ class _HomePageState extends State<HomePage> {
           Row(
             children: <Widget>[
               Text(
-                "Current Location",
+                userLogged ? user.addresses[0].addressLine1 : "Current Location",
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: GoogleFonts.openSans().fontFamily,
                   fontSize: 14.0,
                 ),
+                overflow: TextOverflow.clip,
               ),
               Icon(
                 Icons.edit,
